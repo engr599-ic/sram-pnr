@@ -1,7 +1,5 @@
-set_multi_cpu_usage -remote_host 4 -local_cpu 4
+set_multi_cpu_usage -remote_host 8 -local_cpu 8
 read_db dbs/syn_opt.db/
-
-set_design_mode -process 130
 
 create_net -physical -name VPWR -power
 create_net -physical -name VGND -ground
@@ -16,7 +14,7 @@ set_db design_top_routing_layer met4
 set_db design_bottom_routing_layer met1
 
 # shoot for 50% utilization
-create_floorplan -stdcell_density_size {1.0 0.9 2 2 2 2}
+create_floorplan -stdcell_density_size {1.0 0.8 2 2 2 2}
 
 # Ensure power pins are connected to power nets
 connect_global_net VPWR -type pg_pin -pin_base_name VPWR -all
@@ -30,7 +28,7 @@ add_tracks
 
 add_stripes -nets {VPWR VGND} -layer met5 -direction horizontal -width 12 -spacing 12 -number_of_sets 3 -extend_to design_boundary -create_pins 1 -start_from left -start_offset 12 -stop_offset 12 -switch_layer_over_obs false -max_same_layer_jog_length 2 -pad_core_ring_top_layer_limit rdl -pad_core_ring_bottom_layer_limit li1 -block_ring_top_layer_limit rdl -block_ring_bottom_layer_limit li1 -use_wire_group 0 -snap_wire_center_to_grid none
 
-add_stripes -nets {VPWR VGND} -layer rdl -direction vertical -width 12 -spacing 12 -number_of_sets 3 -extend_to design_boundary -create_pins 1 -start_from left -start_offset 12 -stop_offset 12 -switch_layer_over_obs false -max_same_layer_jog_length 2 -pad_core_ring_top_layer_limit rdl -pad_core_ring_bottom_layer_limit li1 -block_ring_top_layer_limit rdl -block_ring_bottom_layer_limit li1 -use_wire_group 0 -snap_wire_center_to_grid none
+add_stripes -nets {VPWR VGND} -layer met4 -direction vertical -width 12 -spacing 12 -number_of_sets 3 -extend_to design_boundary -create_pins 1 -start_from left -start_offset 12 -stop_offset 12 -switch_layer_over_obs false -max_same_layer_jog_length 2 -pad_core_ring_top_layer_limit rdl -pad_core_ring_bottom_layer_limit li1 -block_ring_top_layer_limit rdl -block_ring_bottom_layer_limit li1 -use_wire_group 0 -snap_wire_center_to_grid none
 
 route_special -connect core_pin \
    -block_pin_target nearest_target \
