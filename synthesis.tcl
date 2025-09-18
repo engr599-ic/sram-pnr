@@ -33,7 +33,7 @@ set_db lib_search_path $LIB_DIR
 set_db syn_generic_effort high
 set_db syn_map_effort high
 
-set_multi_cpu_usage -local_cpu 16
+set_multi_cpu_usage -local_cpu 4
 
 # Disallow tool from using scan flops for non scan chain uses
 set_db use_scan_seqs_for_non_dft false
@@ -41,7 +41,7 @@ set_db use_scan_seqs_for_non_dft false
 read_mmmc $MMMC_FILE
 read_hdl $HDL_FILES
 elaborate $TOP_MODULE
-source lef.tcl
+read_physical -lef [list $TECH_LEF $FILTERED_LEFS]
 init_design -top $TOP_MODULE
 set_top_module $TOP_MODULE
 
