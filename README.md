@@ -1,16 +1,15 @@
-# P1: Run the Flow!
+# P2: Floorplanning!
 
 Version: 2025.1
 ---
 
-## Part A Due Date:  09:59am ET, Thursday, September 11th, 2025
-## Part B Due Date: 09:59am ET, Thursday, September 24th, 2025
+## Part A Due Date: TBD
 
 
 
 # Goal
 
-This project will walk you through the basics of a digital IC design flow using a PICORV RISC-V CPU core.  It will introduce you to both logic synthesis and place and route.  It will also help you understand the goals of optimizing Power/Performance/Area (PPA) for a digital circuit.  
+TBD
 
 # Setup
 
@@ -105,30 +104,9 @@ For documentation on available commands, both tools (in GUI mode) also have a He
 
 # Your Turn
 
-Now that you know the basic flow, it's time to start tweaking for improved PPA (Power-Performance-Area).  Your task is customize this flow twice, once to optimize performance and once to optimize for area.  
-
-## Part A:  Optimize for Performance
-
-By default, your PICORV core is targetting a 100ns (10MHz) clock.  Your task is to see how high you can push the frequency without causing setup/hold violations on any of the process corners.  
 
 ## Suggested Steps
 
-Start by modifying this line in the `functional.sdc` Constraint file: 
-`create_clock -name clk -period 100 -waveform {0 50} [get_ports {clk}]`
-
-You will likely need to optimize both the `synthesis.tcl` and `pnr.tcl` to achieve the highest performance. 
 
 ## Evaluating success
-
-  We provide you with a `./check_timing.sh` command that will check the overall timing result to ensure there are no setup/hold violations.  Check the "Overall" result.  
-
-## Part B:  Optimize for Area
-
-Now it's time to optimize for minimal overal layout area.  Your task is to minimize the overall area without causing any DRC (Design Rule Check)/ connectivity errors.  These frequently occur when the router tries to squeeze too many routes (signal wires) into a given area because it is too compact.  
-
-We suggest starting by modifying the `create_floorplan` command in `pnr.tcl`.  You will likely need to update `synthesis.tcl` also to achieve the best result.  
-
-## Evaluating success
-
- We provide you with a `./check_drc.sh` command that will check your results are free from DRC  and connectivity errors.  Check the "Overall" result.  
  
