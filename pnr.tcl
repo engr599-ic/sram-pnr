@@ -1,3 +1,7 @@
+
+set PDK_DIR /l/sky130_release_0.0.1
+set STDCELL_DIR /l/skywater-pdk/libraries/sky130_fd_sc_ms/latest/cells/
+
 set_multi_cpu_usage -remote_host 8 -local_cpu 8
 read_db dbs/syn_opt.db/
 
@@ -79,3 +83,10 @@ write_lef_abstract sram.lef
 check_drc -out_file drc.rpt
 check_connectivity -out_file connect.rpt -ignore_dangling_wires
 
+
+set STDCELL_GDS [glob -nocomplain -type f $STDCELL_DIR/**/*.gds]
+write_stream sram.gds.gz \
+    -map_file $PDK_DIR/libs/sky130_fd_pr_main/sky130_fd_pr_main.layermap \
+    -lib_name DesignLib \
+    -merge $STDCELL_GDS \
+    -unit 1000 -mode all

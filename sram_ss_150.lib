@@ -1,6 +1,6 @@
 library (sram_8_1024_sky130A ){
   delay_model : table_lookup;
-  date : "Thu Sep 18 12:55:57 2025" ;
+  date : "Tue Oct 14 16:47:27 2025" ;
   revision : "1.0" ;
   library_features(report_delay_calculation); 
   bus_naming_style : "%s[%d]" ;

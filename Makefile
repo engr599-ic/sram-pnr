@@ -9,10 +9,10 @@ synth:
 pnr:
 	innovus -stylus -batch -files pnr.tcl
 
-check_timing:
-	./check_timing.sh
+run_checks:
+	./run_checks.sh
 
-all: synth pnr check_timing
+all: synth pnr run_checks
 
 clean:
 	rm -rf dbs* fv
