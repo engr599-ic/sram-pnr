@@ -18,8 +18,6 @@ GDS_PATH=${SCRIPT_DIR}/sram.gds.gz
 if ! [ -e "$GDS_PATH" ]; then
   echo "ERROR:  ${GDS_PATH} does not exist."
   exit 1
-else
-  echo "Found:  ${GDS_PATH}"
 fi
 
 mkdir -p ${WORK_DIR}

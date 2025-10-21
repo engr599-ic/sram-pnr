@@ -26,7 +26,6 @@ if ! [ -e "$NETLIST_FILE" ]; then
   exit 1
 fi
 
-
 mkdir -p ${WORK_DIR}
 pushd ${WORK_DIR}
 
@@ -63,7 +62,6 @@ echo "abort_on_layout_error yes; " >> ${CTRL_FILE}
 echo "layout_format gdsii; " >> ${CTRL_FILE}
 echo "layout_path \"${GDS_PATH}\";" >> $CTRL_FILE
 
-
 echo "Surpressing warnings"
 unset which
 unset ml
@@ -73,16 +71,16 @@ unset _module_raw
 
 echo "Running PEGASUS LVS on ${GDS_PATH}"
 #/l/cadence/installs/PEGASUS213/bin/pegasus \
-#pegasus \
-#	-lvs \
-#	-top_cell ${TOP_MODULE} \
-#	-source_top_cell ${TOP_MODULE} \
-#	-spice ${WORK_DIR}/${TOP_MODULE}.spi \
-#	--control ${CTRL_FILE} \
-#	-ui_data \
-#	-gdb_data \
-#	-dp 5 \
-#	/l/sky130_release_0.0.1/Sky130_LVS/Sky130_rev_0.0_0.1.lvs.pvl
+pegasus \
+	-lvs \
+	-top_cell ${TOP_MODULE} \
+	-source_top_cell ${TOP_MODULE} \
+	-spice ${WORK_DIR}/${TOP_MODULE}.spi \
+	--control ${CTRL_FILE} \
+	-ui_data \
+	-gdb_data \
+	-dp 5 \
+	/l/sky130_release_0.0.1/Sky130_LVS/Sky130_rev_0.0_0.1.lvs.pvl
 
 popd
 
