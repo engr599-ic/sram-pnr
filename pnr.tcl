@@ -52,7 +52,6 @@ add_tieoffs
 write_db -common dbs/place.db
 
 clock_opt_design
-add_fillers -base_cells {sky130_fd_sc_ms__fill_8 sky130_fd_sc_ms__fill_4 sky130_fd_sc_ms__fill_2 sky130_fd_sc_ms__fill_1}
 write_db -common dbs/ccopt.db
 
 route_opt_design
@@ -60,6 +59,8 @@ time_design -post_route
 time_design -post_route -hold
 opt_design -post_route
 write_db -common dbs/route.db
+
+add_fillers -base_cells {sky130_fd_sc_ms__fill_8 sky130_fd_sc_ms__fill_4 sky130_fd_sc_ms__fill_2 sky130_fd_sc_ms__fill_1}
 
 extract_rc
 opt_signoff -all -report_dir timing_report
