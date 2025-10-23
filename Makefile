@@ -24,4 +24,7 @@ clean:
 	rm -rf *.vg
 	rm -rf RPT_final*
 	rm -rf client_log
-	rm -f *.vg
+	rm -rf *.vg
+	rm -rf pegasus_drc pegasus_lvs
+	rm -rf *.gds.gz
+	rm -rf *.rpt

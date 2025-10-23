@@ -14,7 +14,7 @@ WORK_DIR=${SCRIPT_DIR}/pegasus_lvs
 TOP_MODULE=$(grep 'set TOP_MODULE' synthesis.tcl  | awk '{print $3}')
 echo "Running on TOP_MODULE: ${TOP_MODULE}"
 
-GDS_PATH=${SCRIPT_DIR}/sram.gds.gz
+GDS_PATH=${SCRIPT_DIR}/${TOP_MODULE}.gds.gz
 if ! [ -e "$GDS_PATH" ]; then
   echo "ERROR:  ${GDS_PATH} does not exist."
   exit 1
@@ -68,6 +68,8 @@ unset ml
 unset module
 unset switchml
 unset _module_raw
+
+PEGASUS_LVS=/l/sky130_release_0.1.0/Sky130_LVS
 
 echo "Running PEGASUS LVS on ${GDS_PATH}"
 #/l/cadence/installs/PEGASUS213/bin/pegasus \

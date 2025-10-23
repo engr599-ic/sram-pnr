@@ -14,7 +14,7 @@ WORK_DIR=${SCRIPT_DIR}/pegasus_drc
 TOP_MODULE=$(grep 'set TOP_MODULE' synthesis.tcl  | awk '{print $3}')
 echo "Running on TOP_MODULE: ${TOP_MODULE}"
 
-GDS_PATH=${SCRIPT_DIR}/sram.gds.gz
+GDS_PATH=${SCRIPT_DIR}/${TOP_MODULE}.gds.gz
 if ! [ -e "$GDS_PATH" ]; then
   echo "ERROR:  ${GDS_PATH} does not exist."
   exit 1
@@ -35,6 +35,13 @@ echo "results_db -drc \"${REPORT_FILE}\" -ascii;" >> $CTRL_FILE
 echo "abort_on_layout_error yes;" >> $CTRL_FILE
 echo "layout_format gdsii;" >> $CTRL_FILE
 echo "layout_path \"${GDS_PATH}\";" >> $CTRL_FILE
+# Disable Density Checks
+echo "#DEFINE NODEN" >> ${CTRL_FILE}
+#Disable Guidline Rules
+echo "#DEFINE NOGLR" >> ${CTRL_FILE}
+# Disable Warnings
+echo "#DEFINE NOWARN" >> ${CTRL_FILE}
+
 
 echo "Surpressing warnings"
 unset which
@@ -43,6 +50,8 @@ unset module
 unset switchml
 unset _module_raw
 
+PEGASUS_DRC=/l/sky130_release_0.1.0/Sky130_DRC
+
 echo "Running PEGASUS DRC on ${GDS_PATH}"
 #/l/cadence/installs/PEGASUS213/bin/pegasus \
 pegasus  \
@@ -50,8 +59,9 @@ pegasus  \
 	-ui_data \
 	--control ${CTRL_FILE} \
 	-dp ${NUM_CPUS}  \
-	/l/sky130_release_0.0.1/Sky130_DRC/sky130_rev_0.0_1.0.drc.pvl
+	/l/sky130_release_0.1.0/Sky130_DRC/sky130_rev_0.0_2.12.drc.pvl
 
+	#/l/sky130_release_0.0.1/Sky130_DRC/sky130_rev_0.0_1.0.drc.pvl
 popd
 
 if ! [ -e "$REPORT_FILE" ]; then

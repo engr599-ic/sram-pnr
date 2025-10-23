@@ -1,0 +1,7 @@
+*.cmd*
+*.log*
+fv/
+dbs/*
+*.vg
+*.swo
+*.swp
