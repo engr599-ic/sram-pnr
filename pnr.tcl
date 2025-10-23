@@ -28,9 +28,10 @@ connect_global_net VGND -type pg_pin -pin_base_name VNB -all
 
 add_tracks
 
-add_stripes -nets {VPWR VGND} -layer met5 -direction horizontal -width 12 -spacing 12 -number_of_sets 3 -extend_to design_boundary -create_pins 1 -start_from left -start_offset 12 -stop_offset 12 -switch_layer_over_obs false -max_same_layer_jog_length 2 -pad_core_ring_top_layer_limit rdl -pad_core_ring_bottom_layer_limit li1 -block_ring_top_layer_limit rdl -block_ring_bottom_layer_limit li1 -use_wire_group 0 -snap_wire_center_to_grid none
+add_stripes -nets {VPWR VGND} -layer met5 -direction horizontal -width 12.1 -spacing 12.1 -number_of_sets 3 -extend_to design_boundary -create_pins 1 -start_from left -start_offset 12 -stop_offset 12 -switch_layer_over_obs false -max_same_layer_jog_length 2 -pad_core_ring_top_layer_limit rdl -pad_core_ring_bottom_layer_limit li1 -block_ring_top_layer_limit rdl -block_ring_bottom_layer_limit li1 -use_wire_group 0 -snap_wire_center_to_grid none
 
-add_stripes -nets {VPWR VGND} -layer met4 -direction vertical -width 12 -spacing 12 -number_of_sets 3 -extend_to design_boundary -create_pins 1 -start_from left -start_offset 12 -stop_offset 12 -switch_layer_over_obs false -max_same_layer_jog_length 2 -pad_core_ring_top_layer_limit rdl -pad_core_ring_bottom_layer_limit li1 -block_ring_top_layer_limit rdl -block_ring_bottom_layer_limit li1 -use_wire_group 0 -snap_wire_center_to_grid none
+
+add_stripes -nets {VPWR VGND} -layer met4 -direction vertical -width 12.1 -spacing 12.1 -number_of_sets 3 -extend_to design_boundary -create_pins 1 -start_from left -start_offset 12 -stop_offset 12 -switch_layer_over_obs false -max_same_layer_jog_length 2 -pad_core_ring_top_layer_limit rdl -pad_core_ring_bottom_layer_limit li1 -block_ring_top_layer_limit rdl -block_ring_bottom_layer_limit li1 -use_wire_group 0 -snap_wire_center_to_grid none
 
 route_special -connect core_pin \
    -block_pin_target nearest_target \
@@ -58,10 +59,32 @@ time_design -post_route -hold
 opt_design -post_route
 write_db -common dbs/route.db
 
-add_fillers -base_cells {sky130_fd_sc_ms__fill_8 sky130_fd_sc_ms__fill_4 sky130_fd_sc_ms__fill_2 sky130_fd_sc_ms__fill_1}
 
 extract_rc
 opt_signoff -all -report_dir timing_report
+
+add_fillers -base_cells { sky130_fd_sc_ms__fill_8 sky130_fd_sc_ms__fill_4 sky130_fd_sc_ms__fill_2 sky130_fd_sc_ms__fill_1 }
+
+#Fix Pin DRC issues
+#https://support.cadence.com/apex/ArticleAttachmentPortal?id=a1O0V000006AlgfUAC&pageName=ArticleContent
+#https://support.cadence.com/apex/techpubDocViewerPage?xmlName=tcrcom.xml&title=Innovus%20Stylus%20Common%20UI%20Text%20Command%20Reference%20--%20create_shape%20-%20create_shape&hash=&c_version=25.11&path=TCRcom/TCRcom25.11/create_shape.html
+
+#foreach port [get_db ports clk] {
+foreach port [get_db ports] {
+  puts "Pin: [get_db $port .name] ([get_db $port .direction])"
+  foreach pin [get_db $port .physical_pins] {
+    foreach layer_shape [get_db $pin .layer_shapes] {
+      puts "  Layer: [get_db $layer_shape .layer.name] - Rects: [get_db $layer_shape .shapes.rect]"
+
+      create_shape \
+        -layer [get_db $layer_shape .layer.name] \
+        -patch [get_db $layer_shape .shapes.rect] \
+        -net [get_db $port .name] \
+        -status routed 
+    }
+  }
+}
+
 write_db -common dbs/signoff.db
 
 write_netlist -include_pg -omit_floating_ports -update_tie_connections post_pnr_lvs.vg
