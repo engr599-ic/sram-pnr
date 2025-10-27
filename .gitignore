@@ -5,3 +5,5 @@ dbs/*
 *.vg
 *.swo
 *.swp
+.cadence
+*.rpt
