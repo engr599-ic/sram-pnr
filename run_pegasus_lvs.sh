@@ -5,6 +5,8 @@ set -e
 
 NUM_CPUS=4
 
+STDCELL_HOME=/l/skywater-pdk/libraries/sky130_fd_sc_ms/latest
+
 # Get the absolute path of the script
 SCRIPT_PATH="$(readlink -f "$0")"
 # Get the directory of the script
@@ -29,17 +31,26 @@ fi
 mkdir -p ${WORK_DIR}
 pushd ${WORK_DIR}
 
-echo "Generating Control File"
 CTRL_FILE=${WORK_DIR}/pegasuslvsctl
+INCLUDE_FILE=${WORK_DIR}/include.cdl
+
 ERC_REPORT_FILE=${WORK_DIR}/${TOP_MODULE}.erc_errors.ascii
 SUM_FILE=${WORK_DIR}/${TOP_MODULE}.sum
 
+echo "Generating Include File"
+echo "" > ${INCLUDE_FILE}
+echo ".OPTION SCALE 1e-6" >> ${INCLUDE_FILE}
+for CDL in ${STDCELL_HOME}/cells/*/*.cdl ; do
+    echo ".include \"${CDL}\" " >> ${INCLUDE_FILE}
+done
+
+echo "Generating Control File"
 echo "" > $CTRL_FILE
 echo "text_depth -primary; " >> ${CTRL_FILE}
-echo "virtual_connect -colon no; " >> ${CTRL_FILE}
+echo "virtual_connect -colon yes; " >> ${CTRL_FILE}
 echo "virtual_connect -semicolon_as_colon yes; " >> ${CTRL_FILE}
 echo "virtual_connect -noname; " >> ${CTRL_FILE}
-echo "virtual_connect -report no; " >> ${CTRL_FILE}
+echo "virtual_connect -report yes; " >> ${CTRL_FILE}
 echo "virtual_connect -depth -primary; " >> ${CTRL_FILE}
 echo "lvs_ignore_ports no; " >> ${CTRL_FILE}
 echo "lvs_expand_cell_on_error no; " >> ${CTRL_FILE}
@@ -57,32 +68,41 @@ echo "lvs_report_opt -none; " >> ${CTRL_FILE}
 echo "report_summary -erc \"${TOP_MODULE}.sum\" -replace; " >> ${CTRL_FILE}
 echo "max_results -erc 1000; " >> ${CTRL_FILE}
 echo "results_db -erc \"${ERC_REPORT_FILE}\" -ascii; " >> ${CTRL_FILE}
-echo "schematic_path \"${NETLIST_FILE}\" verilog; " >> ${CTRL_FILE}
 echo "abort_on_layout_error yes; " >> ${CTRL_FILE}
 echo "layout_format gdsii; " >> ${CTRL_FILE}
 echo "layout_path \"${GDS_PATH}\";" >> $CTRL_FILE
+echo "schematic_path \"${NETLIST_FILE}\" verilog; " >> ${CTRL_FILE}
+echo "schematic_path \"${INCLUDE_FILE}\" cdl; " >> ${CTRL_FILE}
 
-echo "Surpressing warnings"
-unset which
-unset ml
-unset module
-unset switchml
-unset _module_raw
+echo "Generating run script"
+cat > run.sh << EOF
+    #!/bin/bash 
 
-PEGASUS_LVS=/l/sky130_release_0.1.0/Sky130_LVS
+    unset which
+    unset ml
+    unset module
+    unset switchml
+    unset _module_raw
 
-echo "Running PEGASUS LVS on ${GDS_PATH}"
-#/l/cadence/installs/PEGASUS213/bin/pegasus \
-pegasus \
-	-lvs \
-	-top_cell ${TOP_MODULE} \
-	-source_top_cell ${TOP_MODULE} \
-	-spice ${WORK_DIR}/${TOP_MODULE}.spi \
-	--control ${CTRL_FILE} \
-	-ui_data \
-	-gdb_data \
-	-dp 5 \
-	/l/sky130_release_0.0.1/Sky130_LVS/Sky130_rev_0.0_0.1.lvs.pvl
+    PEGASUS_LVS=/l/sky130_release_0.1.0/Sky130_LVS
+
+    echo "Running PEGASUS LVS on ${GDS_PATH}"
+    pegasus \\
+        -lvs \\
+        -top_cell ${TOP_MODULE} \\
+        -source_top_cell ${TOP_MODULE} \\
+        -spice ${WORK_DIR}/${TOP_MODULE}.spi \\
+        --control ${CTRL_FILE} \\
+        -automatch \\
+        -ui_data \\
+        -gdb_data \\
+        -dp ${NUM_CPUS}  \\
+        /l/sky130_release_0.0.1/Sky130_LVS/Sky130_rev_0.0_0.1.lvs.pvl
+EOF
+
+chmod +x run.sh
+
+./run.sh
 
 popd
 
