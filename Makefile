@@ -12,7 +12,10 @@ pnr:
 run_checks:
 	./run_checks.sh
 
-all: synth pnr run_checks
+all: 
+	make synth 
+	make pnr 
+	make run_checks
 
 clean:
 	rm -rf dbs* fv
