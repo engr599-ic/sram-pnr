@@ -116,7 +116,8 @@ foreach port [get_db ports] {
 
 write_db -common dbs/signoff.db
 
-write_netlist -include_pg -omit_floating_ports -update_tie_connections post_pnr_lvs.vg
+write_netlist -include_pg -omit_floating_ports -update_tie_connections  \
+        -exclude_leaf_cells post_pnr_lvs.vg
 write_netlist -remove_power_ground post_pnr_sim.vg
 
 # Extract LEF and LIB files for abstraction
