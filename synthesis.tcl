@@ -45,7 +45,7 @@ read_physical -lef [list $TECH_LEF $FILTERED_LEFS]
 init_design -top $TOP_MODULE
 set_top_module $TOP_MODULE
 
-write_db dbs/init.db
+write_db dbs/syn_init.db
 
 syn_generic
 write_db dbs/syn_generic.db
