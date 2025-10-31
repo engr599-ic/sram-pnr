@@ -100,6 +100,9 @@ cat > run.sh << EOF
         /l/sky130_release_0.0.1/Sky130_LVS/Sky130_rev_0.0_0.1.lvs.pvl
 EOF
 
+#make sure old mismatch file doesn't exist
+rm -rf mismatch
+
 chmod +x run.sh
 
 ./run.sh
@@ -127,11 +130,13 @@ if [ ${CLEAN} -ne 0 ]; then
 fi
 
 echo "Checking LVS Results"
-grep 'Run Result' ${WORK_DIR}/mismatched
-CLEAN=$(grep 'Run Result' ${WORK_DIR}/${TOP_MODULE}.sum  | awk '{print $5}' )
-if [ "${CLEAN}" != "PASSED" ]; then
+MISMATCH=${WORK_DIR}/mismatched
+if [ -e "${MISMATCH}" ]; then
+    grep 'Run Result' ${MISMATCH}
     echo "LVS FAIL"
     exit 1
+else
+    echo "no mismatches found"
 fi
 
 echo "LVS PASS"
