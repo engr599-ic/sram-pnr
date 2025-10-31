@@ -71,7 +71,7 @@ update_power_vias -skip_via_on_pin standardcell -bottom_layer met1 -via_scale_he
 
 add_well_taps -cell sky130_fd_sc_ms__tapvpwrvgnd_1 -cell_interval 50
 
-write_db -common dbs/pnr_init.db
+write_db -common dbs/init.db
 
 set_db place_global_place_io_pins true
 
