@@ -33,6 +33,7 @@ pushd ${WORK_DIR}
 
 CTRL_FILE=${WORK_DIR}/pegasuslvsctl
 INCLUDE_FILE=${WORK_DIR}/include.cdl
+MYRULES_FILE=${WORK_DIR}/myrules.pvl
 
 ERC_REPORT_FILE=${WORK_DIR}/${TOP_MODULE}.erc_errors.ascii
 SUM_FILE=${WORK_DIR}/${TOP_MODULE}.sum
@@ -43,6 +44,13 @@ echo ".OPTION SCALE 1e-6" >> ${INCLUDE_FILE}
 for CDL in ${STDCELL_HOME}/cells/*/*.cdl ; do
     echo ".include \"${CDL}\" " >> ${INCLUDE_FILE}
 done
+
+echo "Generating MYRULES File"
+echo "" > ${MYRULES_FILE}
+echo "lvs_write_netlist -layout netlist.lay " >> ${MYRULES_FILE}
+echo "lvs_write_netlist -source netlist.sch " >> ${MYRULES_FILE}
+echo "lvs_write_netlist_reduced -layout netlist.reduced.lay " >> ${MYRULES_FILE}
+echo "lvs_write_netlist_reduced -source netlist.reduced.sch " >> ${MYRULES_FILE}
 
 echo "Generating Control File"
 echo "" > $CTRL_FILE
@@ -97,6 +105,7 @@ cat > run.sh << EOF
         -ui_data \\
         -gdb_data \\
         -dp ${NUM_CPUS}  \\
+        ${MYRULES_FILE} \\
         /l/sky130_release_0.0.1/Sky130_LVS/Sky130_rev_0.0_0.1.lvs.pvl
 EOF
 
@@ -136,7 +145,16 @@ if [ -e "${MISMATCH}" ]; then
     echo "LVS FAIL"
     exit 1
 else
-    echo "no mismatches found"
+    echo "No mismatches found"
+    echo "     .-\"\"\"\"\"\"-."
+    echo "   .'          '.    "
+    echo "  /   O      O   \\  "
+    echo " :                :  "
+    echo " |                |  "
+    echo " : ',          ,' :  "
+    echo "  \\  '-......-'  /  "
+    echo "   '.          .'    "
+    echo "     '-......-'      "
 fi
 
 echo "LVS PASS"
