@@ -86,7 +86,7 @@ Now open the Pegasus DRC run as in Innovus (Pegasus->Open Run).  This time you m
 
 Once opened, select a DRC rule and violation, and it will be highlighted in Virtuoso's Layout View: 
 
-<img width="1385" height="687" alt="image" src="https://github.com/user-attachments/assets/9ab7669c-4f23-46c4-886c-d9cc40c1575a" />
+<img width="1246" height="687" alt="image" src="https://github.com/user-attachments/assets/e3f865d8-068d-40b0-b594-1a44737a41de" />
 
 Recall that more details about the individual Design Rules are given in the [Complete Design Rule Guide](#complete-design-rule-guide).
 
