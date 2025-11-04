@@ -30,7 +30,7 @@ if ! [ -e cds.lib ]; then
     echo "SOFTINCLUDE /nfs/nfs5-insecure/home/insecure-ro/software/rhel7_x86_64/cadence/installs/IC618/share/cdssetup/hdl/cds.lib" >> cds.lib
     echo "SOFTINCLUDE /nfs/nfs5-insecure/home/insecure-ro/software/rhel7_x86_64/cadence/installs/IC618/share/cdssetup/pic/cds.lib" >> cds.lib
     echo "SOFTINCLUDE /nfs/nfs5-insecure/home/insecure-ro/software/rhel7_x86_64/cadence/installs/IC618/share/cdssetup/sg/cds.lib" >> cds.lib
-    echo "DEFINE sky130_fd_pr_main /l/sky130_release_0.0.1/libs/sky130_fd_pr_main" >> cds.lib
+    echo "DEFINE sky130_fd_pr_main /l/sky130_release_0.1.0/libs/sky130_fd_pr_main" >> cds.lib
 fi
 
 echo "streaming in gds"
