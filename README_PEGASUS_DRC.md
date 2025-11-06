@@ -1,6 +1,6 @@
-# How to Run Pegasus DRC/LVS
+# How to Run Pegasus DRC
 
-This document details running Pegasus DRC and LVS, and how to view their results in both Innovus and Virtuoso 
+This document details running Pegasus DRC, and how to view their results in both Innovus and Virtuoso 
 
 ## Pegasus DRC
 
@@ -95,6 +95,4 @@ Recall that more details about the individual Design Rules are given in the [Com
 A complete manual for the Sky130 Design Rules can be found here: 
 
 `https://skywater-pdk.readthedocs.io/en/main/rules.html`
-
-## Pegasus LVS
 
