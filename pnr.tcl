@@ -53,11 +53,11 @@ add_stripes -nets {VPWR VGND} -layer met5 -direction horizontal -width 12.1 -spa
 
 add_stripes -nets {VPWR VGND} -layer met4 -direction vertical -width 12.1 -spacing 12.1 -number_of_sets 3 -extend_to design_boundary -create_pins 1 -start_from left -start_offset 12 -stop_offset 12 -switch_layer_over_obs false -max_same_layer_jog_length 2 -pad_core_ring_top_layer_limit rdl -pad_core_ring_bottom_layer_limit li1 -block_ring_top_layer_limit rdl -block_ring_bottom_layer_limit li1 -use_wire_group 0 -snap_wire_center_to_grid none
 
-# shrink VPWR/VGND M4/M5 power vias to hit DRC rules
-update_power_vias -skip_via_on_pin standardcell \
-    -nets {VPWR VGND}  -update_vias 1 \
-    -bottom_layer met4 -top_layer met5 \
-    -via_scale_height 90 -via_scale_width 90 
+## shrink VPWR/VGND M4/M5 power vias to hit DRC rules
+#update_power_vias -skip_via_on_pin standardcell \
+#    -nets {VPWR VGND}  -update_vias 1 \
+#    -bottom_layer met4 -top_layer met5 \
+#    -via_scale_height 90 -via_scale_width 90 
 
 route_special -connect core_pin \
    -block_pin_target nearest_target \
@@ -67,7 +67,7 @@ route_special -connect core_pin \
    -allow_layer_change 1
 
 #shrink VPWR/VGND power vias on M1/M2
-update_power_vias -skip_via_on_pin standardcell -bottom_layer met1 -via_scale_height 90 -update_vias 1 -nets {VPWR VGND} -via_scale_width 90 -top_layer met2
+#update_power_vias -skip_via_on_pin standardcell -bottom_layer met1 -via_scale_height 90 -update_vias 1 -nets {VPWR VGND} -via_scale_width 90 -top_layer met2
 
 add_well_taps -cell sky130_fd_sc_ms__tapvpwrvgnd_1 -cell_interval 50
 
